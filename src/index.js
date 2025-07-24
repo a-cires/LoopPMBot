@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 import { Client, Events, GatewayIntentBits, Routes, REST } from 'discord.js';
 import CreateTaskCommand from './commands/tasks/CreateTask.js';
+import { registerSubcommands } from './utils/registry.js';
 
 console.log(new CreateTaskCommand());
 
@@ -26,6 +27,9 @@ client.once(Events.ClientReady, (readyClient) => {
 async function main() {
 	try {
 		console.log('Started refreshing application (/) commands.');
+		client.slashSubcommands = new Collection();
+		await registerSubcommands(client);
+		console.log(client.slashSubcommands);
 
 		await rest.put(Routes.applicationGuildCommands(CLIENT_ID, GUILD_ID), {
 			body: [],
